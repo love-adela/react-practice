@@ -2,23 +2,33 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function Square() {
-  // `value`: state, `setValue`: setter function
-  const [value, setValue] = useState(null);
-
+function Square(props) { // Controlled Components: Board 컴포넌트에서 값을 받고 언제 클릭되었는지를 Board에 알려줌. (Maintain state X)
   return (
     <button 
       className="square" 
-      onClick={() => setValue('X')}
+      onClick={() => props.onClick()}
     >
-      {value}
+      {props.value}
     </button>
   );
 }
 
 function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  function handleClick(i) {
+    const newSquares = squares.slice(); // .slice() creates a copy of the squares array
+    newSquares[i] = 'X';
+    setSquares(newSquares);
+  }
+
   function renderSquare(i) {
-    return <Square value={i} />;
+    return (
+      <Square
+        value={squares[i]} 
+        onClick={() =>handleClick(i)}
+      />
+    );
   }
 
   const status = 'Next player: X';
